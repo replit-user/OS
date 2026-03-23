@@ -25,5 +25,6 @@ static void cmd_version(uint8_t color);
 
 static int streq(unsigned char *a, char *b);
 void run_command(unsigned char *input, uint8_t color);
-
+//replit-user:format
+static void cmd_format(uint8_t color);
 #endif

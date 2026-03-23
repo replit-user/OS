@@ -3,7 +3,7 @@
 #include "drivers/keyboard.h"
 #include "layouts/kb_layouts.h"
 #include "terminal/terminal.h"
-
+#include "drivers/fs.h"
 
 // The command table
 static Command commands[] = {
@@ -15,12 +15,16 @@ static Command commands[] = {
     { "setkeyuk", cmd_setkeyuk},
     { "clear", cmd_clear },
     { "version", cmd_version },
+    {"format",   cmd_format}
 };
 
 static int num_commands = sizeof(commands) / sizeof(commands[0]);
 
 // ---- Command Functions ----
 
+static void cmd_format(uint8_t color){
+    init_fs();
+}
 static void cmd_help(uint8_t color) {
     printf("\nhelp   - show this message\n", color);
     printf("hello  - say hello\n", color);
@@ -30,6 +34,7 @@ static void cmd_help(uint8_t color) {
     printf("setkeyuk - Sets keyboard layout to UK QWERTY\n", color); // MorganPG1 - Add UK Keyboard layout
     printf("clear  - clear the screen\n", color); //ember
     printf("version - Version of the operating system\n", color); // TheOtterMonarch - Output version of the OS
+    printf("format -format the floppy drive\n",color);
 }
 
 static void cmd_hello(uint8_t color) {
@@ -68,7 +73,7 @@ static void cmd_setkeyus(uint8_t color) {
 
 
 static void cmd_setkeyuk(uint8_t color) { // Added by MorganPG1
-    set_layout(LAYOUTS[2]); 
+    set_layout(LAYOUTS[2]);
     printf("\nKeyboard layout set to UK QWERTY\n", color);
 }
 

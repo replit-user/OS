@@ -18,10 +18,10 @@ AS_FLAGS = -f bin
 LD_FLAGS = -m elf_i386 -T linker.ld
 KERNEL_OBJECTS = kernel/kernel.o kernel/ports.o kernel/mem.o
 DRIVER_OBJECTS = kernel/drivers/vga.o kernel/drivers/keyboard.o
-MISC_OBJECTS = kernel/colors.o kernel/terminal/terminal.o kernel/commands.o kernel/layouts/kb_layouts.o # ADDED
+MISC_OBJECTS = kernel/colors.o kernel/terminal/terminal.o kernel/commands.o kernel/layouts/kb_layouts.o kernel/fs.o #last edited by replit-user
 # Builds the final disk image
 all: os.img
-	
+
 # If no clang detected, use gcc
 %.o: %.c
 	$(CC) $(CC_FLAGS) $< -o $@ || $(CC2) $(CC_FLAGS) $< -o $@
@@ -44,13 +44,19 @@ kernel/mem.o: kernel/mem.c
 	$(CC) $(CC_FLAGS) $< -o $@ || $(CC2) $(CC_FLAGS) $< -o $@
 kernel/terminal/terminal.o: kernel/terminal/terminal.c
 	$(CC) $(CC_FLAGS) $< -o $@ || $(CC2) $(CC_FLAGS) $< -o $@
+# added by replit-user
+kernel/drivers/disk.o: kernel/drivers/disk.c
+	$(CC) $(CC_FLAGS) -c $< -o $@ || $(CC2) $(CC_FLAGS) -c $< -o $@
 # Added by Ember2819
 kernel/commands.o: kernel/commands.c
 	$(CC) $(CC_FLAGS) $< -o $@ || $(CC2) $(CC_FLAGS) $< -o $@
 # End added by Ember2819
-# Link all kernel objects 
-kernel.elf: $(KERNEL_OBJECTS) $(DRIVER_OBJECTS) $(MISC_OBJECTS)
-	$(LD) $(LD_FLAGS) $(KERNEL_OBJECTS) $(DRIVER_OBJECTS) $(MISC_OBJECTS) -o kernel.elf
+# Link all kernel objects
+#added by replit-user
+kernel.elf: $(KERNEL_OBJECTS) $(DRIVER_OBJECTS) $(MISC_OBJECTS) kernel/drivers/disk.o
+	$(LD) $(LD_FLAGS) $(KERNEL_OBJECTS) $(DRIVER_OBJECTS) $(MISC_OBJECTS) kernel/drivers/disk.o -o kernel.elf
+kernel/fs.o: kernel/drivers/fs.c
+	$(CC) $(CC_FLAGS) $< -o $@ || $(CC2) $(CC_FLAGS) $< -o $@
 kernel.bin: kernel.elf
 	$(OBJCOPY) $(OBJCOPY_ARGS) kernel.elf kernel.bin
 	$(TRUNCATE) -s $(TRUNC_AMNT) kernel.bin

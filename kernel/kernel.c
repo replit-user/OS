@@ -6,7 +6,7 @@
 #include "terminal/terminal.h"
 #include "commands.h" // Included by Ember2819: Adds commands
 #include "colors.h" // Added by MorganPG1 to centralise colors into one file
-
+#include "drivers/fs.h" // Added by replit-user, a filesystem
 // Ember2819: Add command functionality
 void process_input(unsigned char *buffer) {
     run_command(buffer, TERM_COLOR);
@@ -23,11 +23,11 @@ void _entry()
 
     // Setup keyboard layouts
     set_layout(LAYOUTS[0]);
-    
+
     while (1) {    // Shell loop
         // Prints shell prompt
         printf("> ", PROMPT_COLOR);
-        
+
         //Obtains and processes the user input
         unsigned char buff[512];
         input(buff, 512, TERM_COLOR);
