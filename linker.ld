@@ -1,0 +1,17 @@
+/* By Ember2819, your welcome dorito girl. Took me way too long to figure out how to make this... */
+
+ENTRY(_entry)
+
+SECTIONS
+{
+    . = 0x1000;
+
+    .text   : { 
+        *(.text.entry)
+        *(.text)   
+    }
+    
+    .rodata : { *(.rodata) }
+    .data   : { *(.data)   }
+    .bss    : { *(.bss) *(COMMON) }
+}
